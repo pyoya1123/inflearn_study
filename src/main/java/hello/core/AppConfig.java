@@ -2,6 +2,7 @@ package hello.core;
 
 import hello.core.discount.DiscountPolicy;
 import hello.core.discount.FixDiscountPolicy;
+import hello.core.discount.RateDiscountPolicy;
 import hello.core.member.MemberService;
 import hello.core.member.MemberServiceImpl;
 import hello.core.member.MemoryMemberRepository;
@@ -26,8 +27,10 @@ public class AppConfig {
 
     // 디스카운트 할인 정책은 나는 Fix를 사용할거야. 라는 의미임.
     public DiscountPolicy discountPolicy() {
-        return new FixDiscountPolicy();
+//        return new FixDiscountPolicy();
+        return new RateDiscountPolicy();
     }
+
 
     /*
     이전에는 객체를 생성하고, 이 객체에다가 어떤게 들어가야돼, 할당 해야돼 이런거를 우리가 멤버서비스 클래스 안에서 직접 했었음.
@@ -54,5 +57,11 @@ public class AppConfig {
     이렇게 해서 pdf에서 AppConfig 리팩터링의 "기대하는 그림"에서 이 설계에 대한 그림이 여기 구성정보에 그대로 드러나는거임.
     역할들이 나오고, 그 역할에 대한 구현이 어떻게 되는지 한눈에 들어오는거임.
     이렇게 리팩토링하면 되게 큰 장점이 있다.
+     */
+
+
+    /*
+    AppConfig로 인해서 완전 나눠진거임. 실제 배우들이 어떤 배우 하는 역할을 영역과, 실제 공연을 기획하고 담당자들 섭외하고 이런 역할이 나눠진거임.
+    이젠 Fix -> Rate로 바꾼다고 하더라도 구성 영역인 AppConfig만 바꾸면 되고, 사용 영역은 안바꿔도 됨.
      */
 }
