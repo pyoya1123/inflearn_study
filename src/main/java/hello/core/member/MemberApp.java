@@ -1,6 +1,8 @@
 package hello.core.member;
 
 import hello.core.AppConfig;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 // ctrl + alt + v
 public class MemberApp {
@@ -19,10 +21,28 @@ public class MemberApp {
      */
 
     public static void main(String[] args) {
-        AppConfig appConfig = new AppConfig();
+//        AppConfig appConfig = new AppConfig();
         // 밑에 memberService에는 멤버서비스impl이 들어가있을거임.
-        MemberService memberService = appConfig.memberService();
+//        MemberService memberService = appConfig.memberService();
 //        MemberService memberService = new MemberServiceImpl();
+
+        // 스프링은 모든게 ApplicationContext라는걸로 시작함.
+        // 이게 스프링 컨테이너라고 보면 됨.
+        // 얘가 모든걸 관리해줌. 우리 객체들을. 아까 AppConfig에서 Bean으로 등록해준 애들을
+        ApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppConfig.class);
+        // 위에서 AnnotationConfig로 시작하는 ApplicationContext 객체를 생성해줬는데,
+        // 이게 뭐냐면, AppConfig에서 annotation 기반으로 Configure를 하고 있는 애들을 의미함.
+        // 위에처럼 파라미터로 AppConfig.class를 넣게되면, AppConfig에 있는 환경설정 정보를 가지고 스프링이
+        // AppConfig 안에 있는 @Bean으로 등록된 애들을 다 스프링 컨테이너에다가 객체 생성한 것들을 집어넣어서 관리해줌.
+
+        /*
+        @Bean으로 등록하게되면 기본적으로 메소드 이름으로 등록이 됨. 그래서 밑에 코드는 무슨 의미냐면,
+        memberService라는 이름을 가진 객체를 찾을거야임. 두번째 파라미터는 타입임. 이걸 넣어줘야 반환타입이 딱 맞음
+        그니까 memberService라는 이름을 가진 객체를 찾을건데, 타입은 MemberService야.
+         */
+        MemberService memberService = applicationContext.getBean("memberService", MemberService.class);
+
+
         Member member = new Member(1L, "memberA", Grade.VIP);
         memberService.join(member);
 
