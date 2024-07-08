@@ -8,15 +8,13 @@ import org.junit.jupiter.api.Test;
 public class MemberServiceTest {
     
     MemberService memberService;
-    
+
     // test 실행 전에 무조건 실행되는 거임
     @BeforeEach
     public void beforeEach() {
         AppConfig appConfig = new AppConfig();
         memberService = appConfig.memberService();
     }
-
-//    MemberService memberService = new MemberServiceImpl();
 
 
     /*

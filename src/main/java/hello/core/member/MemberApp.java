@@ -21,14 +21,6 @@ public class MemberApp {
      */
 
     public static void main(String[] args) {
-//        AppConfig appConfig = new AppConfig();
-        // 밑에 memberService에는 멤버서비스impl이 들어가있을거임.
-//        MemberService memberService = appConfig.memberService();
-//        MemberService memberService = new MemberServiceImpl();
-
-        // 스프링은 모든게 ApplicationContext라는걸로 시작함.
-        // 이게 스프링 컨테이너라고 보면 됨.
-        // 얘가 모든걸 관리해줌. 우리 객체들을. 아까 AppConfig에서 Bean으로 등록해준 애들을
         ApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppConfig.class);
         // 위에서 AnnotationConfig로 시작하는 ApplicationContext 객체를 생성해줬는데,
         // 이게 뭐냐면, AppConfig에서 annotation 기반으로 Configure를 하고 있는 애들을 의미함.
