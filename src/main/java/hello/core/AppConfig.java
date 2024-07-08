@@ -15,23 +15,35 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AppConfig {
 
+
     /*
-    밑에와 같이 @Bean을 이렇게 달아주면 얘네가 다 spring container에 등록이 됨.
+    싱글톤 이라고 했는데, 이상한 점이 있음.
+    만약에 스프링 빈이 이 멤버서비스를 생성할 때 호출을 할 텐데,
+    그러면 어떻게 되냐? new MemberServiceImpl을 호출하면서 memberRepository()를 호출할거임.
+    자바 코드니까 이 메소드가 그냥 호출이 될거임.
+    그러면은 new MemoryMemberRepository가 생성이 될거임.
+
+    @Bean memberService -> new MemoryMemberRepository()를 한 번 호출함.
+    @Bean orderService -> new MemoryMemberRepository()를 한 번 호출함.
+    이러면 싱글톤이 깨지지 않냐? 라고 생각하는게 정상임.
+    이런 생각이 들면 일단 테스트 코드로 돌려보면 됨.
      */
     @Bean
     public MemberService memberService() {
-        // 이제 new instance가 생성자를 통해 들어간다 해서, 생성자 주입이라고 함.
-        return new MemberServiceImpl(getRepository());
+        System.out.println("call AppConfig.memberService");
+        return new MemberServiceImpl(memberRepository());
     }
 
     @Bean
-    public static MemoryMemberRepository getRepository() {
+    public MemoryMemberRepository memberRepository() {
+        System.out.println("call AppConfig.memberRepository");
         return new MemoryMemberRepository();
     }
 
     @Bean
     public OrderService orderService() {
-        return new OrderServiceImpl(getRepository(), discountPolicy());
+        System.out.println("call AppConfig.orderService");
+        return new OrderServiceImpl(memberRepository(), discountPolicy());
     }
 
     @Bean
