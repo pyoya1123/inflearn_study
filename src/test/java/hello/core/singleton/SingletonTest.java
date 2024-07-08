@@ -5,6 +5,8 @@ import hello.core.member.MemberService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class SingletonTest {
 
@@ -33,5 +35,26 @@ public class SingletonTest {
         웹 어플리케이션의 특징은 고객의 요청이 많음.
         이러면 요청할 때 마다 객체가 생성되어야함. 효율적이지 않음.
          */
+    }
+    
+    @Test
+    @DisplayName("스프링 컨테이너와 싱글톤")
+    void springContainer() {
+
+//        AppConfig appConfig = new AppConfig();
+        ApplicationContext ac = new AnnotationConfigApplicationContext(AppConfig.class);
+        MemberService memberService1 = ac.getBean("memberService", MemberService.class);
+        MemberService memberService2 = ac.getBean("memberService", MemberService.class);
+        // 조회할 때 마다 같은 객체를 반환하는지 볼거임.
+        /*
+        스프링이 처음에 컨테이너에서 등록했던 빈을 반환해주는거임.
+         */
+
+        // 참조값이 다른 것을 확인.
+        System.out.println("memberService1 = " + memberService1);
+        System.out.println("memberService2 = " + memberService2);
+
+        // memberService1 != memberService2
+        Assertions.assertThat(memberService1).isSameAs(memberService2);
     }
 }
