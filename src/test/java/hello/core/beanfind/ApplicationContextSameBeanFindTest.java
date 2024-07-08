@@ -16,6 +16,8 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+// 이런 클래스도 눈에는 안보이지만 맨 오른쪽에 extends Object가 붙어있음.
+// 최상위 부모는 Object임.
 public class ApplicationContextSameBeanFindTest {
 
     AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(SameBeanConfig.class);
