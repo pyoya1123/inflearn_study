@@ -16,6 +16,8 @@ excludeFilters는 뭐냐면, 컴포넌트 스캔으로 쫙 뒤져가지고 스�
 
 @Configuration
 @ComponentScan(
+        // member만 컴포넌트 스캔 범위에 허용함.
+        basePackages = "hello.core.member",
         // @Configuration 붙은 애는 뺀다는 의미임.
         excludeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = Configuration.class)
 )
