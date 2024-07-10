@@ -12,16 +12,21 @@ import org.springframework.stereotype.Component;
 @Component
 public class OrderServiceImpl implements OrderService{
 
-    @Autowired private MemberRepository memberRepository;
-    @Autowired private DiscountPolicy discountPolicy;
+    private MemberRepository memberRepository;
+    private DiscountPolicy discountPolicy;
 
-    /*
-    안티패턴임.
-    외부에서 변경이 안된다.
-    예를 들어, 더미 데이터로 임시적으로 테스트를 해보려고 위에 객체들에 값을 대입하려고 하지만,
-    순수 자바 코드로는 값을 변경할 수 있는 방법이 존재하지않음.
-    OrderServiceTest.java 코드 에서 추가 설명함.
-     */
+    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
+        this.memberRepository = memberRepository;
+        this.discountPolicy = discountPolicy;
+    }
+
+    // 일반 메소드 주입
+    // 사실 수정자 주입도 이거랑 비슷함. 그냥 메소드 위에 Autowired가 있는거임.
+    @Autowired
+    public void init(MemberRepository memberRepository, DiscountPolicy discountPolicy){
+        this.memberRepository = memberRepository;
+        this.discountPolicy = discountPolicy;
+    }
 
     @Override
     public Order createOrder(Long memberId, String itemName, int itemPrice) {
