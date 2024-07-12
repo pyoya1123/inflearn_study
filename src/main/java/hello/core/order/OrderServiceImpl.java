@@ -9,7 +9,7 @@ import hello.core.member.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component("service")
+@Component
 public class OrderServiceImpl implements OrderService{
 
     private final MemberRepository memberRepository;
