@@ -11,18 +11,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor // required라고 했는데, 필수 값인 final이 붙은걸 가지고 생성자를 만들어줌.
+//@RequiredArgsConstructor // required라고 했는데, 필수 값인 final이 붙은걸 가지고 생성자를 만들어줌.
 public class OrderServiceImpl implements OrderService{
 
     private final MemberRepository memberRepository;
     private final DiscountPolicy discountPolicy;
 
     // @RequiredArgsConstructor 어노테이션이 생성자를 만들어주니까 밑에 코드는 필요없음.
-//    @Autowired
-//    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
-//        this.memberRepository = memberRepository;
-//        this.discountPolicy = discountPolicy;
-//    }
+    @Autowired
+    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy rateDiscountPolicy) {
+        this.memberRepository = memberRepository;
+        this.discountPolicy = rateDiscountPolicy;
+    }
 
 
     // 일반 메소드 주입
