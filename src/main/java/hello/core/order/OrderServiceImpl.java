@@ -20,7 +20,7 @@ public class OrderServiceImpl implements OrderService{
 
     // @RequiredArgsConstructor 어노테이션이 생성자를 만들어주니까 밑에 코드는 필요없음.
     @Autowired
-    public OrderServiceImpl(MemberRepository memberRepository, @Qualifier("mainDiscountPolicy") DiscountPolicy discountPolicy) {
+    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
         this.memberRepository = memberRepository;
         this.discountPolicy = discountPolicy;
     }
