@@ -1,23 +1,30 @@
 package hello.core.order;
 
+import hello.core.discount.FixDiscountPolicy;
+import hello.core.member.Grade;
+import hello.core.member.Member;
+import hello.core.member.MemoryMemberRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 class OrderServiceImplTest {
 
-    /*
-    수정자 주입으로 OrderServiceImpl을 구현했을 땐 nullPointException이 남.
-    내가 아무리 createOrder 함수를 사용하고 싶더라도, createOrder 까보면 memberRepository랑 discountPolicy 사용하는 코드 있음.
-    그러면 가짜 메모리 멤버 레포지토리라도 만들어서 넣어줘야하는거임.
-    임의의 더미라도. discountPolicy도 마찬가지임. 근데 여기선 누락을 해버린거임.
-    왜 누락이 됐냐?
-    왜냐하면 내가 테스트를 짜는 입장에서는 OrderServiceImpl에 의존관계가 뭐가 들어가더라?
-    눈에 안보이는거임. 코드를 까봐야 아는거임. 그래서 테스트를 짤 때 안보여서 이런 실수를 하는거임.
-     */
+
     @Test
     void createOrder() {
-        OrderServiceImpl orderService = new OrderServiceImpl();
-        orderService.createOrder(1L, "itemA", 10000);
+        /*
+        생성자 주입을 했을 땐 밑에 new OrderServiceImpl에 파라미터로 뭘 안넣어주면 컴파일 오류가 뜸. 여기서 실수를 바로 잡을 수 있는거임.
+        더미 데이터든, 뭐 임의의 어떤 메모리멤버레포지토리 든지 new로해서 넣어줘야하는 것을 알 수 있는거임.
+         */
+
+        MemoryMemberRepository memberRepository = new MemoryMemberRepository();
+        memberRepository.save(new Member(1L, "name", Grade.VIP));
+
+        OrderServiceImpl orderService = new OrderServiceImpl(memberRepository, new FixDiscountPolicy());
+        Order order = orderService.createOrder(1L, "itemA", 10000);
+        assertThat(order.getDiscountPrice()).isEqualTo(1000);
     }
 }
