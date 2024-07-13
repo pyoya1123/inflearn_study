@@ -17,7 +17,7 @@ public class BeanLifeCycleTest {
 
     @Configuration
     static class LifeCycleConfig {
-        @Bean
+        @Bean(initMethod = "init", destroyMethod = "close")
         public NetworkClient networkClient() { // 밑에 코드들이 호출된 결과물이 스프링 빈으로 등록될거임.
             NetworkClient networkClient = new NetworkClient();
             networkClient.setUrl("http://hello-spring.dev");
