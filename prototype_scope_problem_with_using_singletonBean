@@ -1,0 +1,36 @@
+일단 ClientBean은 싱글톤임.
+//    @Test
+//    void singletonClientUsePrototype() {
+//        AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(ClientBean.class, PrototypeBean.class);
+//          일단 여기서 ClientBean.class랑 PrototypeBean.class를 넣어서 등록했기 때문에
+            스프링 컨테이너에 자동으로 등록이 됨.
+//        ClientBean clientBean1 = ac.getBean(ClientBean.class);
+//        int count1 = clientBean1.logic();
+//        assertThat(count1).isEqualTo(1);
+//
+//        ClientBean clientBean2 = ac.getBean(ClientBean.class);
+//        int count2 = clientBean2.logic();
+//        assertThat(count2).isEqualTo(2);
+//    }
+
+//    @Scope("singleton")
+//    static class ClientBean {
+//        private final PrototypeBean prototypeBean;
+//
+//        @Autowired
+//        public ClientBean(PrototypeBean prototypeBean){
+//            this.prototypeBean = prototypeBean;
+//        }
+//
+//        public int logic() {
+//            prototypeBean.addCount();
+//            int count = prototypeBean.getCount();
+//            return count;
+//        }
+//    }
+그런데 스프링 빈이 등록되면서, 위에 보면 생성자에 Autowired가 있음. 이러면 뭐냐? 여기서 프로토 타입 빈 내놔 라는거임.
+그러면 이때 스프링 컨테이너에 내부적으로 요청하는거임. 그러면 스프링 컨테이너가 프로토타입 빈을 만들어서 그때 던져줌.
+이때 만들어진 애가 private final PrototypeBean prototypeBean에 할당되는거임. 즉 생성 시점에 주입이 된다.
+그래서 계속 같은걸 쓰는거임. 클라이언트빈1이 로직을 호출하면 위에서 말했듯이, 이미 생성 시점에 주입된 prototypeBean을
+쓰는거임. 그리고 클라이언트빈2가 로직을 호출하면 위에서 말했던 생성 시점에 주입된 애를 같이 쓰는거임.
+그래서 count는 2가 반영이 되는거임.
