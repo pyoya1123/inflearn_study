@@ -3,6 +3,7 @@ package hello.core.web;
 import hello.core.common.MyLogger;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -12,7 +13,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class LogDemoController {
 
     private final LogDemoService logDemoService;
-    private final MyLogger myLogger;
+    private final ObjectProvider<MyLogger> myLoggerProvider; // 이렇게하면 myLogger을 주입 받는게 아니라,
+    // myLogger을 찾을 수 있는, dependency lookup 할 수 있는 애가 주입이 됨.
+    // 그래서 얘는 주입 시점에 주입 받을 수 있음.
+
     /*
     myLogger의 생명주기에 대해 말하자면, HttpRequest가 들어와서 나갈 때까지 이거를 쓸 수 있는데,
     그 사이에 스프링 컨테이너한테 달라고 해야하는데, 지금 HttpRequest 요청이 없는거임.
@@ -31,6 +35,8 @@ public class LogDemoController {
     @ResponseBody
     public String logDemo(HttpServletRequest request) {
         String requestURL = request.getRequestURL().toString();
+        MyLogger myLogger = myLoggerProvider.getObject(); // getObject를 하는 순간에 MyLogger가 만들어짐.
+        // 만들어지면서 init을 호출하고, 호출하는 과정에서 uuid를 HttpRequest랑 연결을 시키는거임.
         myLogger.setRequestURL(requestURL);
 
         myLogger.log("controller test");
