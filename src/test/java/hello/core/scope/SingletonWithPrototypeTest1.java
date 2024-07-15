@@ -9,13 +9,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Scope;
 
+//import javax.inject.Provider;
+import jakarta.inject.Provider;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SingletonWithPrototypeTest1 {
 
     @Test
     void prototypeFind() {
-        AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(ClientBean.class, PrototypeBean.class);
+        AnnotationConfigApplicationContext ac =
+                new AnnotationConfigApplicationContext(ClientBean.class, PrototypeBean.class);
         PrototypeBean prototypeBean1 = ac.getBean(PrototypeBean.class);
         prototypeBean1.addCount();
         assertThat(prototypeBean1.getCount()).isEqualTo(1);
@@ -28,7 +32,8 @@ public class SingletonWithPrototypeTest1 {
 
     @Test
     void singletonClientUsePrototype() {
-        AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(ClientBean.class, PrototypeBean.class);
+        AnnotationConfigApplicationContext ac =
+                new AnnotationConfigApplicationContext(ClientBean.class, PrototypeBean.class);
 
         ClientBean clientBean1 = ac.getBean(ClientBean.class);
         int count1 = clientBean1.logic();
@@ -44,7 +49,7 @@ public class SingletonWithPrototypeTest1 {
 //        private final PrototypeBean prototypeBean;
 
         @Autowired
-        private ObjectProvider<PrototypeBean> prototypeBeanProvider;
+        private Provider<PrototypeBean> prototypeBeanProvider;
 
 //        @Autowired
 //        public ClientBean(PrototypeBean prototypeBean){
@@ -58,7 +63,7 @@ public class SingletonWithPrototypeTest1 {
             그러면 ApplicationContext에는 많은 기능들이 있는데 이것들을 다 보는게 아니라, 딱 필요한 부분만 찾아서 쓰는 느낌임.
             그리고 우리가 원했던 필요할 때마다 스프링 컨테이너에 요청하는 기능을 사용할 수 있는거임.
              */
-            PrototypeBean prototypeBean = prototypeBeanProvider.getObject();
+            PrototypeBean prototypeBean = prototypeBeanProvider.get();
             prototypeBean.addCount();
             int count = prototypeBean.getCount();
             return count;
